@@ -1,0 +1,17 @@
+1) ¿Describa qué es una hoja de cálculo?
+2) ¿Describa qué un manejador de Bases de Datos Relacional?
+3) ¿Describa qué es un lenguaje de programación?
+4) ¿Qué es el lenguaje de programación Python?
+5) ¿Describa los principales componentes del lenguaje de programación Python?
+    Variables, Estructuras de datos (listas, tuplas, diccionarios y conjuntos), 
+    Estructuras de control condicional, Estructuras de control repetitivas,
+    Funciones y Módulos.
+6) ¿Qué es un entorno virtual en Python, cuál es su utilidad e importancia?
+7) ¿Qué son dependencias en Python?
+8) ¿Describa cómo el lenguaje de programación Python permite la integración con archivos,
+    hojas de cálculo y bases de datos.
+9) ¿Qué es la librería Python Pandas y para qué sirve?
+10) ¿Qué es la librería Python Matplotlib y para qué sirve?
+11) Conceptos estadísticos:
+    Media, Mediana, Moda, Desviación Estándar, Percentiles, 
+    Cuartiles, Outliers, Distribución y Correlación.

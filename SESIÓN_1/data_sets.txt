@@ -1,0 +1,5 @@
+Caso introductorio:
+https://www.kaggle.com/datasets/mohithsairamreddy/salary-data
+
+Caso Sesión 1:
+kaggle.com/datasets/gauravtopre/bank-customer-churn-dataset 

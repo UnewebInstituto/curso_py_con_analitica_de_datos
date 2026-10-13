@@ -1,0 +1,7 @@
+echo "# curso_py_con_analitica_de_datos" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/UnewebInstituto/curso_py_con_analitica_de_datos.git
+git push -u origin main

@@ -1,0 +1,678 @@
+Caso archivo Salary_Data.csv
+https://www.kaggle.com/datasets/mohithsairamreddy/salary-data
+
+*(1)*
+
+El archivo **`Salary_Data.csv`** contiene información detallada sobre perfiles profesionales, experiencia, nivel educativo y compensación salarial. A continuación se presenta un resumen completo de su contenido y estructura:
+
+### **1. Dimensiones y Estructura General**
+
+* **Total de registros (filas):** 6,704 profesionales.
+* **Total de variables (columnas):** 6 columnas principales.
+
+Las columnas que componen el dataset son:
+
+1. **`Age`** (Edad): Edad del empleado (en años).
+2. **`Gender`** (Género): Género del empleado (registra categorías como *Male*, *Female* y *Other*).
+3. **`Education Level`** (Nivel Educativo): Grado académico alcanzado (ej. *Bachelor's*, *Master's*, *PhD*, *High School*).
+4. **`Job Title`** (Cargo / Puesto de trabajo): Título o rol profesional (contiene 193 puestos diferentes, como *Software Engineer*, *Data Scientist*, *Data Analyst*, entre otros).
+5. **`Years of Experience`** (Años de experiencia): Trayectoria laboral en años.
+6. **`Salary`** (Salario): Compensación económica anual registrada.
+
+---
+
+### **2. Resumen Estadístico Principal**
+
+A partir de la exploración de los datos numéricos, se destacan las siguientes métricas:
+
+| Métrica | Edad (`Age`) | Años de Experiencia (`Years of Experience`) | Salario (`Salary`) |
+| --- | --- | --- | --- |
+| **Media (Promedio)** | 33.62 años | 8.09 años | $115,326.96 |
+| **Mediana (50%)** | 32.00 años | 7.00 años | $115,000.00 |
+| **Mínimo** | 21.00 años | 0.00 años | $350.00 |
+| **Máximo** | 62.00 años | 34.00 años | $250,000.00 |
+| **Desviación Estándar** | 7.61 | 6.06 | $52,786.18 |
+
+---
+
+### **3. Características Adicionales**
+
+* **Valores Nulos:** El dataset presenta una cantidad mínima de valores faltantes (entre 2 y 5 nulos dependiendo de la columna), los cuales pueden requerir una limpieza básica antes de ser analizados formalmente.
+* **Puestos más frecuentes:** Los roles con mayor representación en el archivo corresponden al área tecnológica y de datos, destacando puestos como *Software Engineer*, *Data Scientist*, *Software Engineer Manager* y *Data Analyst*.
+
+*(2)*
+Para acceder a un archivo llamado `Salary_Data.csv` utilizando únicamente las **dependencias estándar de Python** (es decir, sin instalar librerías externas como Pandas), debes emplear el módulo nativo **`csv`** combinado con la función `open()` de Python.
+
+A continuación tienes un ejemplo práctico de cómo abrirlo, leer su contenido y recorrer sus filas:
+
+```python
+import csv
+
+# Ruta del archivo CSV
+archivo_csv = "./SESIÓN_1/Salary_Data_Test.csv"
+
+# Abrir el archivo utilizando el módulo nativo csv
+with open(archivo_csv, mode="r", encoding="utf-8") as archivo:
+  # Crear un objeto lector (reader)
+  lector = csv.reader(archivo)
+
+  # Leer opcionalmente la cabecera (primera fila)
+  cabecera = next(lector)
+  print("Cabeceras de las columnas:", cabecera)
+
+  # Recorrer el resto de las filas del archivo
+  for fila in lector:
+    print(fila)  # Cada fila se procesa como una lista de texto
+
+```
+
+### **Puntos clave a tener en cuenta:**
+
+* **`encoding='utf-8'`**: Es muy recomendable incluirlo para evitar errores si el archivo contiene caracteres especiales o tildes.
+* **`next(lector)`**: Permite separar la primera línea (títulos de las columnas) de los datos en caso de que quieras procesarlos de forma independiente.
+* **Tipo de dato**: Cada fila se almacena y se lee como una **lista de strings (textos)**, por lo que si necesitas hacer operaciones matemáticas con los salarios (como calcular un promedio), deberás convertir explícitamente el valor a número usando `float()` o `int()`.
+
+
+(3)
+Este script completo en Python está diseñado para automatizar la **lectura, limpieza, procesamiento y cálculo estadístico** de un conjunto de datos financieros o laborales almacenados en formato CSV (específicamente apuntando a una ruta organizada como `./SESIÓN_1/Salary_Data_Test.csv`), utilizando únicamente **librerías estándar y nativas** de Python sin requerir dependencias complejas como Pandas.
+
+A continuación se detalla su funcionamiento bloque por bloque:
+
+### **1. Importación de Módulos**
+
+* **`import csv`**: Carga el módulo nativo para procesar archivos con estructura tabular separados por comas.
+* **`import statistics`**: Importa las funciones matemáticas oficiales de Python para calcular operaciones estadísticas avanzadas como la mediana y la desviación estándar.
+
+### **2. Configuración de Rutas y Carga Segura**
+
+* **`archivo_csv = "./SESIÓN_1/Salary_Data_Test.csv"`**: Define la ruta relativa exacta donde se encuentra el archivo de pruebas a analizar.
+* **Apertura y Limpieza de BOM**: Utiliza un bloque `with open(...)` asegurando el cierre automático del archivo. Lee todo el contenido de golpe y aplica `.lstrip('\ufeff')` para eliminar cualquier carácter invisible de codificación (*Byte Order Mark*) que Excel suele agregar al principio de los archivos CSV, evitando así errores al leer los nombres de las columnas.
+* **`content.splitlines()`**: Divide el texto masivo del archivo en una lista de líneas individuales.
+* **`csv.reader(lines)`**: Convierte esas líneas en un lector estructurado de filas y columnas.
+
+### **3. Extracción de Encabezados y Mapeo de Columnas**
+
+* **`header = next(lector)`**: Lee la primera línea (títulos de las columnas) y la almacena.
+* **`header.index(...)`**: Busca dinámicamente el número de columna (índice) correspondiente a `'Age'`, `'Years of Experience'` y `'Salary'`, permitiendo que el script funcione correctamente incluso si el orden de las columnas cambia dentro del archivo.
+
+### **4. Bucle de Limpieza y Filtrado Fila por Fila**
+
+El bucle `for fila in lector:` recorre cada registro del archivo aplicando filtros de seguridad:
+
+* **Validación de longitud**: Si una fila está incompleta o vacía, la salta mediante `continue` para prevenir errores del tipo *IndexError*.
+* **Control de excepciones (`try-except`)**: Intenta convertir el texto de cada celda a un número decimal (`float`) aplicando `.strip()` para limpiar espacios en blanco. Si encuentra texto corrupto o celdas inválidas, el bloque `except ValueError` descarta la fila de forma limpia sin interrumpir la ejecución del programa.
+* **Acumulación**: Los valores válidos se van guardando ordenadamente en sus respectivas listas (`ages`, `experiences`, `salaries`).
+
+### **5. Función Modular de Estadísticas (`calcular_metricas`)**
+
+Recibe cualquier lista de números y calcula de manera automatizada:
+
+* **`len(datos)`**: Total de registros analizados ($n$).
+* **`sum(datos) / n`**: Media o promedio aritmético.
+* **`statistics.median(datos)`**: Mediana (valor central exacto).
+* **`min()` y `max()**`: Valores mínimo y máximo del conjunto.
+* **`statistics.stdev(datos)`**: Desviación estándar (con una condición de seguridad para evitar fallos si la lista tiene menos de dos elementos).
+* Retorna todos estos resultados agrupados en un **diccionario estructurado**.
+
+### **6. Presentación de Resultados**
+
+Finalmente, el script procesa las listas de edades, experiencias y salarios pasándolas por la función estadística y muestra en la consola un **reporte formateado y limpio**, imprimiendo los valores decimales acotados a dos cifras y aplicando formato de moneda (`$`) para el caso de los salarios.
+
+A continuación el código:
+#-----------------------------------------------------------------
+
+import csv
+import statistics
+
+# Listas para almacenar los valores de cada columna
+ages = []
+experiences = []
+salaries = []
+# Ruta del archivo CSV
+archivo_csv = "./SESIÓN_1/Salary_Data_Test.csv"
+
+# Abrir el archivo CSV manejando posibles marcas de orden de bytes (BOM)
+with open(archivo_csv, mode='r', encoding='utf-8', errors='ignore') as archivo:
+  content = archivo.read().lstrip('\ufeff')
+  lines = content.splitlines()
+  lector = csv.reader(lines)
+
+  # Leer la cabecera para identificar los índices de las columnas
+  header = next(lector)
+  age_idx = header.index('Age')
+  exp_idx = header.index('Years of Experience')
+  sal_idx = header.index('Salary')
+
+  # Recorrer el archivo fila por fila y extraer los datos numéricos
+  for fila in lector:
+    if len(fila) <= max(age_idx, exp_idx, sal_idx):
+      continue
+    try:
+      if fila[age_idx].strip():
+        ages.append(float(fila[age_idx]))
+      if fila[exp_idx].strip():
+        experiences.append(float(fila[exp_idx]))
+      if fila[sal_idx].strip():
+        salaries.append(float(fila[sal_idx]))
+    except ValueError:
+      continue  # Salta filas que tengan errores de conversión
+
+
+# Función auxiliar para calcular las métricas estadísticas requeridas
+def calcular_metricas(datos):
+  n = len(datos)
+  media = sum(datos) / n
+  mediana = statistics.median(datos)
+  minimo = min(datos)
+  maximo = max(datos)
+  desv_std = statistics.stdev(datos) if n > 1 else 0
+  return {
+      'media': media,
+      'mediana': mediana,
+      'min': minimo,
+      'max': maximo,
+      'std': desv_std,
+  }
+
+
+# Obtener resultados para cada variable
+stats_age = calcular_metricas(ages)
+stats_exp = calcular_metricas(experiences)
+stats_sal = calcular_metricas(salaries)
+
+# Imprimir resultados formateados
+print('--- EDAD (Age) ---')
+print(
+    f"Media: {stats_age['media']:.2f} | Mediana: {stats_age['mediana']:.2f}"
+    f" | Mín: {stats_age['min']:.2f} | Máx: {stats_age['max']:.2f} | Desv.Std:"
+    f" {stats_age['std']:.2f}"
+)
+
+print('\n--- AÑOS DE EXPERIENCIA (Years of Experience) ---')
+print(
+    f"Media: {stats_exp['media']:.2f} | Mediana: {stats_exp['mediana']:.2f}"
+    f" | Mín: {stats_exp['min']:.2f} | Máx: {stats_exp['max']:.2f} | Desv.Std:"
+    f" {stats_exp['std']:.2f}"
+)
+
+print('\n--- SALARIO (Salary) ---')
+print(
+    f"Media: ${stats_sal['media']:,.2f} | Mediana:"
+    f" ${stats_sal['mediana']:,.2f} | Mín: ${stats_sal['min']:,.2f} | Máx:"
+    f" ${stats_sal['max']:,.2f} | Desv.Std: ${stats_sal['std']:,.2f}"
+)
+
+
+
+CASO BBDD POSTGRESQL
+
+*(1)*
+Esta versión del script adapta el procesamiento de datos analíticos para extraer la información **directamente desde una base de datos relacional PostgreSQL** en lugar de leerla de un archivo plano CSV, manteniendo la filosofía de usar únicamente módulos nativos y herramientas estándar (como IDLE y el conector `psycopg2`).
+
+A continuación se detalla paso a paso lo que hace este script:
+
+### **1. Importación de Módulos y Conexión**
+
+* **`import statistics`** e **`import psycopg2`**: Carga el módulo matemático estándar de Python y el conector oficial necesario para interactuar con bases de datos PostgreSQL.
+* **`db_config`**: Almacena las credenciales técnicas de conexión (nombre de la base de datos `db_bm_py_analitica_curso`, usuario, contraseña, servidor local `localhost` y puerto por defecto `5432`).
+
+### **2. Bloque de Protección y Extracción Segura (`try-except`)**
+
+Todo el proceso de red y base de datos se encuentra encapsulado para evitar caídas abruptas del programa si ocurre un problema de conexión:
+
+* **`psycopg2.connect(**db_config)`** y **`cursor = conexion.cursor()`**: Establecen la sesión activa con el motor de PostgreSQL y abren un canal ejecutor de consultas.
+* **Consulta SQL optimizada**: Ejecuta un `SELECT` sobre las columnas `age`, `years_of_experience` y `salary` de la tabla `salary_data`, aplicando un filtro `WHERE ... IS NOT NULL` para delegar la limpieza inicial de datos vacíos directamente al motor de la base de datos.
+* **`cursor.fetchall()`**: Recupera todos los registros devueltos por la consulta en forma de una lista de tuplas en la memoria de Python.
+* **Cierre de recursos**: Cierra ordenadamente el cursor y la conexión con `cursor.close()` y `conexion.close()`. Si la conexión falla, el bloque `except` captura el error, imprime una advertencia y finaliza de forma controlada con `exit()`.
+
+### **3. Llenado y Validación de Listas**
+
+* El bucle `for fila in registros:` recorre cada tupla obtenida de la base de datos y la desempaqueta directamente en variables individuales (`age`, `years_of_experience`, `salary`).
+* Utiliza un bloque interno `try-except` con `float(...)` para asegurar que los datos numéricos se almacenen de forma limpia en las listas `ages`, `experiences` y `salaries`, descartando cualquier anomalía inesperada mediante `continue`.
+
+### **4. Cálculo Estadístico Modular (`calcular_metricas`)**
+
+* Define la función matemática que procesa de manera centralizada cualquier lista numérica entregada, evaluando:
+* El conteo total de elementos (`len`).
+* La **media** (promedio aritmético).
+* La **mediana** mediante el módulo `statistics`.
+* Los valores **mínimo** y **máximo**.
+* La **desviación estándar** (`statistics.stdev`), condicionada a que existan al menos dos elementos para evitar errores matemáticos.
+
+
+* Devuelve un diccionario estructurado con las métricas calculadas.
+
+### **5. Presentación de Resultados**
+
+* Valida que las estadísticas se hayan generado correctamente (`if stats_age and stats_exp and stats_sal:`).
+* Imprime en la consola un **reporte ejecutivo formateado**, mostrando las métricas de edad y experiencia con dos decimales, y aplicando formato de moneda ($) con separadores de miles para el análisis salarial.
+
+
+*(2)*
+Para realizar el mismo análisis y procesamiento estadístico utilizando datos provenientes directamente de una base de datos PostgreSQL (en lugar de leerlos de un archivo CSV plano), la estrategia cambia: nos conectamos a la base de datos, extraemos los registros mediante una consulta SQL, los cargamos en estructuras nativas de Python y aplicamos exactamente las mismas funciones estadísticas que ya construimos.
+
+Para definir una tabla en una base de datos PostgreSQL, se utiliza la sentencia SQL CREATE TABLE. Esta instrucción permite especificar el nombre de la tabla, sus columnas, los tipos de datos que almacenará cada una y las restricciones o reglas de integridad (como claves primarias, valores obligatorios o únicos).
+
+Tomando como referencia los datos que hemos estado analizando en nuestro curso (el dataset de salarios y perfiles profesionales), un ejemplo práctico de definición de tabla en PostgreSQL sería el siguiente:
+
+(SE USARÁ PGADMIN PARA ESTA DEFINICIÓN)
+
+CREATE TABLE salary_data (
+    id SERIAL PRIMARY KEY,                          -- Identificador único por registro
+    age INTEGER,
+    gender CHARACTER VARYING(40),
+    education_level TEXT,
+    job_title TEXT,
+    years_of_experience NUMERIC(5,2),
+    salary NUMERIC(13,2)
+);
+
+
+Dado que estamos limitados al uso de la librería estándar y módulos nativos, el enfoque ideal en un entorno de IDLE y Python puro es utilizar el módulo psycopg2 (o psycopg según la versión instalada) para la conexión a PostgreSQL.
+
+Aquí tienes el script completo en Python para lograrlo:
+
+import statistics
+import psycopg2
+
+# Configuración de la conexión a PostgreSQL
+# (Ajusta estos parámetros según los datos de tu servidor local o remoto)
+db_config = {
+    'dbname': 'db_bm_py_analitica_curso',
+    'user': 'postgres',
+    'password': '1234567',
+    'host': 'localhost',
+    'port': '5432',
+}
+
+# Listas para almacenar los valores extraídos de la BD
+ages = []
+experiences = []
+salaries = []
+
+try:
+  # 1. Conexión a la base de datos PostgreSQL
+  conexion = psycopg2.connect(**db_config)
+  cursor = conexion.cursor()
+
+  # 2. Consulta SQL para extraer los datos de la tabla salary_data
+  consulta = """
+        SELECT age, years_of_experience, salary 
+        FROM salary_data 
+        WHERE age IS NOT NULL 
+          AND years_of_experience IS NOT NULL 
+          AND salary IS NOT NULL;
+    """
+
+  cursor.execute(consulta)
+  registros = cursor.fetchall()
+
+  # 3. Recorrer los registros de la base de datos y llenar las listas
+  for fila in registros:
+    # Como la consulta ya trae el orden exacto, los mapeamos por índice
+    age, years_of_experience, salary = fila
+
+    # Conversión y almacenamiento seguro
+    try:
+      ages.append(float(age))
+      experiences.append(float(years_of_experience))
+      salaries.append(float(salary))
+    except (ValueError, TypeError):
+      continue  # Salta filas con datos anómalos
+
+  cursor.close()
+  conexion.close()
+
+except Exception as e:
+  print(f'Error al conectar o consultar la base de datos: {e}')
+  exit()
+
+
+# 4. Función auxiliar para calcular las métricas estadísticas (la misma de antes)
+def calcular_metricas(datos):
+  n = len(datos)
+  if n == 0:
+    return None
+  media = sum(datos) / n
+  mediana = statistics.median(datos)
+  minimo = min(datos)
+  maximo = max(datos)
+  desv_std = statistics.stdev(datos) if n > 1 else 0
+  return {
+      'media': media,
+      'mediana': mediana,
+      'min': minimo,
+      'max': maximo,
+      'std': desv_std,
+  }
+
+
+# 5. Obtener resultados estadísticos para cada variable
+stats_age = calcular_metricas(ages)
+stats_exp = calcular_metricas(experiences)
+stats_sal = calcular_metricas(salaries)
+
+# 6. Imprimir resultados formateados
+if stats_age and stats_exp and stats_sal:
+  print('--- EDAD (Age) [Desde PostgreSQL] ---')
+  print(
+      f"Media: {stats_age['media']:.2f} | Mediana: {stats_age['mediana']:.2f}"
+      f" | Mín: {stats_age['min']:.2f} | Máx: {stats_age['max']:.2f} |"
+      f" Desv.Std: {stats_age['std']:.2f}"
+  )
+
+  print('\n--- AÑOS DE EXPERIENCIA (Years of Experience) ---')
+  print(
+      f"Media: {stats_exp['media']:.2f} | Mediana: {stats_exp['mediana']:.2f}"
+      f" | Mín: {stats_exp['min']:.2f} | Máx: {stats_exp['max']:.2f} |"
+      f" Desv.Std: {stats_exp['std']:.2f}"
+  )
+
+  print('\n--- SALARIO (Salary) ---')
+  print(
+      f"Media: ${stats_sal['media']:,.2f} | Mediana:"
+      f" ${stats_sal['mediana']:,.2f} | Mín: ${stats_sal['min']:,.2f} | Máx:"
+      f" ${stats_sal['max']:,.2f} | Desv.Std: ${stats_sal['std']:,.2f}"
+  )
+else:
+  print('No se pudieron calcular las métricas (listas vacías o sin datos).')
+
+
+CASO HOJA DE CÁLCULO EXCEL
+
+*(1)*
+Este programa en Python realiza un proceso completo de **extracción, limpieza, validación y análisis estadístico** de datos laborales y salariales leídos directamente desde un archivo de Excel (`Salary_Data_Test.xlsx`), empleando la librería `openpyxl` y el módulo estándar `statistics`.
+
+A continuación, te presento el desglose estructurado de sus componentes clave:
+
+### **1. Configuración y Carga del Archivo (`openpyxl`)**
+
+* **`openpyxl.load_workbook(archivo_excel, data_only=True)`**: Carga el libro de trabajo de Excel en memoria. El parámetro `data_only=True` garantiza que se lean los **valores numéricos resultantes** de las celdas en caso de que contengan fórmulas, en lugar de extraer el código de la fórmula en texto.
+* **`ws = wb.active`**: Selecciona de forma automática la hoja activa de trabajo del archivo.
+
+### **2. Mapeo Dinámico de Columnas**
+
+* **`header = [cell.value for cell in ws[1]]`**: Extrae los títulos de las columnas leyendo toda la primera fila del archivo.
+* **`header.index(...)`**: Busca de manera inteligente y flexible las posiciones exactas (índices numéricos) de las columnas `'Age'`, `'Years of Experience'` y `'Salary'`, permitiendo que el script funcione sin problemas aunque el orden de las columnas cambie dentro de la hoja de cálculo.
+
+### **3. Procesamiento, Filtrado y Conversión Fila por Fila**
+
+* **`ws.iter_rows(min_row=2, values_only=True)`**: Recorre todas las filas de la hoja de cálculo a partir de la segunda fila, omitiendo los encabezados.
+* **Validación de seguridad y nulos**: Verifica que la fila contenga los índices necesarios y comprueba mediante `.strip()` que los datos extraídos no estén vacíos o sean nulos (`None`).
+* **Bloque `try-except**`: Convierte los valores de texto a números decimales de tipo `float` y los almacena en sus listas respectivas (`ages`, `experiences`, `salaries`). Si encuentra celdas corruptas, textos anómalos o errores de conversión, la instrucción `continue` los descarta de forma limpia para evitar que el programa se detenga.
+
+### **4. Función Modular de Estadísticas (`calcular_metricas`)**
+
+Una función centralizada que recibe cualquier lista de números y calcula de manera automática:
+
+* **Conteo ($n$) y Media**: Determina el tamaño de la muestra y calcula el promedio aritmético.
+* **Mediana**: Obtiene el valor central exacto utilizando `statistics.median()`.
+* **Mínimo y Máximo**: Extrae los límites inferior y superior de los datos.
+* **Desviación Estándar**: Calcula la dispersión estadística con `statistics.stdev()`, incluyendo una condición de protección (`if n > 1 else 0`) para evitar errores matemáticos si la lista cuenta con menos de dos elementos.
+* **Retorno estructurado**: Empaqueta todos los cálculos en un diccionario organizado por claves descriptivas.
+
+### **5. Generación del Reporte en Consola**
+
+* Evalúa que las métricas de cada variable se hayan procesado con éxito.
+* Imprime un **informe ejecutivo formateado**, mostrando los años de experiencia y la edad con dos decimales de precisión, y aplicando formato monetario ($) con separadores de miles para la variable salarial.
+
+
+*(2)*
+Para efectuar la adecuación de tu script y realizar el procesamiento analítico leyendo directamente desde un archivo de Excel (Salary_Data_Test.xlsx) en lugar de PostgreSQL, no podemos usar módulos nativos de Python, ya que el formato .xlsx es un archivo binario comprimido en ZIP y Python por defecto no incluye una librería para leer libros de Excel en su biblioteca estándar.
+
+Por lo tanto, la manera estándar y profesional de lograrlo en un entorno de desarrollo en Python es utilizando la librería openpyxl.
+
+A continuación tienes el script adaptado para leer los datos desde Excel, limpiar y procesar las listas numéricas, calcular las métricas estadísticas usando el módulo nativo statistics, y generar el archivo Excel de resultados:
+
+import statistics
+import openpyxl
+
+# Ruta del archivo de Excel de entrada
+archivo_excel = './Salary_Data_Test.xlsx'
+
+# Listas para almacenar los valores extraídos de Excel
+ages = []
+experiences = []
+salaries = []
+
+try:
+  # 1. Cargar el libro de trabajo de Excel
+  wb = openpyxl.load_workbook(archivo_excel, data_only=True)
+  ws = wb.active  # Selecciona la hoja activa
+
+  # 2. Leer la cabecera (primera fila) para identificar dinámicamente los índices de las columnas
+  header = [cell.value for cell in ws[1]]
+  age_idx = header.index('Age')
+  exp_idx = header.index('Years of Experience')
+  sal_idx = header.index('Salary')
+
+  # 3. Recorrer las filas de Excel omitiendo la cabecera (comenzando desde la fila 2)
+  for row in ws.iter_rows(min_row=2, values_only=True):
+    # Validar que la fila tenga suficientes columnas
+    if row is None or len(row) <= max(age_idx, exp_idx, sal_idx):
+      continue
+
+    age = row[age_idx]
+    experience = row[exp_idx]
+    salary = row[sal_idx]
+
+    # Conversión y almacenamiento seguro (filtrando nulos o vacíos)
+    try:
+      if age is not None and str(age).strip():
+        ages.append(float(age))
+      if experience is not None and str(experience).strip():
+        experiences.append(float(experience))
+      if salary is not None and str(salary).strip():
+        salaries.append(float(salary))
+    except (ValueError, TypeError):
+      continue  # Salta filas con datos anómalos o texto corrupto
+
+except Exception as e:
+  print(f'Error al leer el archivo de Excel: {e}')
+  exit()
+
+
+# 4. Función auxiliar para calcular las métricas estadísticas (módulo statistics)
+def calcular_metricas(datos):
+  n = len(datos)
+  if n == 0:
+    return None
+  media = sum(datos) / n
+  mediana = statistics.median(datos)
+  minimo = min(datos)
+  maximo = max(datos)
+  desv_std = statistics.stdev(datos) if n > 1 else 0
+  return {
+      'media': media,
+      'mediana': mediana,
+      'min': minimo,
+      'max': maximo,
+      'std': desv_std,
+  }
+
+
+# 5. Obtener resultados estadísticos para cada variable
+stats_age = calcular_metricas(ages)
+stats_exp = calcular_metricas(experiences)
+stats_sal = calcular_metricas(salaries)
+
+# 6. Imprimir resultados formateados en consola
+if stats_age and stats_exp and stats_sal:
+  print('--- EDAD (Age) [Desde Excel] ---')
+  print(
+      f"Media: {stats_age['media']:.2f} | Mediana: {stats_age['mediana']:.2f}"
+      f" | Mín: {stats_age['min']:.2f} | Máx: {stats_age['max']:.2f} |"
+      f" Desv.Std: {stats_age['std']:.2f}"
+  )
+
+  print('\n--- AÑOS DE EXPERIENCIA (Years of Experience) ---')
+  print(
+      f"Media: {stats_exp['media']:.2f} | Mediana: {stats_exp['mediana']:.2f}"
+      f" | Mín: {stats_exp['min']:.2f} | Máx: {stats_exp['max']:.2f} |"
+      f" Desv.Std: {stats_exp['std']:.2f}"
+  )
+
+  print('\n--- SALARIO (Salary) ---')
+  print(
+      f"Media: ${stats_sal['media']:,.2f} | Mediana:"
+      f" ${stats_sal['mediana']:,.2f} | Mín: ${stats_sal['min']:,.2f} | Máx:"
+      f" ${stats_sal['max']:,.2f} | Desv.Std: ${stats_sal['std']:,.2f}"
+  )
+else:
+  print('No se pudieron calcular las métricas (listas vacías o sin datos).')
+
+
+CASO Bank Customer Churn Prediction
+kaggle.com/datasets/gauravtopre/bank-customer-churn-dataset 
+
+Archivo **`Bank Customer Churn Prediction.csv`**, un conjunto de datos ampliamente utilizado en ciencia de datos y análisis financiero para predecir la **fuga de clientes (*churn*)** en el sector bancario.
+
+A continuación, te presento un resumen detallado de su estructura y características principales:
+
+---
+
+### **1. Estructura general del conjunto de datos**
+
+* **Total de registros (filas):** 10,000 clientes
+* **Total de variables (columnas):** 12 atributos
+* **Valores nulos:** El archivo se encuentra limpio, sin valores faltantes en ninguna de sus columnas.
+
+---
+
+### **2. Descripción de las Columnas**
+
+El dataset incluye información demográfica, financiera y de comportamiento del cliente:
+
+* **`customer_id`**: Identificador único del cliente.
+* **`credit_score`**: Puntuación de crédito del cliente (varía entre 350 y 850).
+* **`country`**: País de residencia del cliente (ej. Francia, España, Alemania).
+* **`gender`**: Género del cliente (*Female* / *Male*).
+* **`age`**: Edad del cliente (promedio de ~38.9 años).
+* **`tenure`**: Años que el cliente lleva vinculado o fidelizado con el banco (promedio de ~5 años).
+* **`balance`**: Saldo o cuenta corriente del cliente (con un promedio aproximado de $76,485).
+* **`products_number`**: Número de productos bancarios que el cliente tiene contratados (entre 1 y 4).
+* **`credit_card`**: Indicador binario de si el cliente posee tarjeta de crédito (1 = Sí, 0 = No; ~70.5% poseen tarjeta).
+* **`active_member`**: Indicador de si el cliente es considerado un miembro activo en la institución (1 = Sí, 0 = No; ~51.5% son activos).
+* **`estimated_salary`**: Salario estimado anual del cliente (promedio de ~$100,090).
+* **`churn` (Variable Objetivo)**: Indica si el cliente ha abandonado el banco (1 = Sí se fue, 0 = No se fue).
+
+---
+
+### **3. Distribución de la Variable Objetivo (*Churn*)**
+
+Al analizar la tasa de abandono (*churn*):
+
+* **Clientes retenidos (`0`)**: **79.63%** (7,963 clientes)
+* **Clientes que abandonaron (`1`)**: **20.37%** (2,037 clientes)
+
+Esto muestra un escenario clásico de **desbalance de clases**, un factor importante a tener en cuenta si planeas desarrollar modelos de Machine Learning predictivos.
+
+---
+
+Este programa en Python realiza un análisis automatizado del archivo de predicción de abandono de clientes (**`Bank Customer Churn Prediction.csv`**) empleando únicamente herramientas y módulos nativos de Python (`csv`), sin requerir librerías externas complejas. Su objetivo principal es calcular el volumen total de clientes analizados y determinar los porcentajes exactos de clientes retenidos frente a aquellos que abandonaron el banco.
+
+A continuación se detalla paso a paso cómo funciona cada sección:
+
+### **1. Inicialización y Configuración del Archivo**
+
+* **`archivo_csv = './Bank Customer Churn Prediction.csv'`**: Define la ruta del archivo de datos a procesar.
+* **Variables contadoras**: Establece acumuladores en cero (`total_clientes`, `clientes_retenidos` y `clientes_abandonaron`) para registrar las métricas clave durante el recorrido del archivo.
+
+### **2. Apertura Segura y Manejo de BOM (`try-except`)**
+
+Todo el flujo de procesamiento se encuentra protegido dentro de un bloque de control de excepciones:
+
+* **`open(..., encoding='utf-8', errors='ignore')`**: Abre el archivo de texto plano asegurando la compatibilidad de caracteres e ignorando posibles fallos de codificación.
+* **`content.read().lstrip('\ufeff')`**: Lee el contenido completo del archivo y remueve de forma preventiva cualquier marca de orden de bytes (*Byte Order Mark* o BOM) que los editores de texto o herramientas ofimáticas suelen incorporar al inicio, evitando errores al interpretar las cabeceras.
+* **`csv.reader(lines)`**: Convierte el contenido dividido por líneas en un lector estructurado de filas y columnas.
+
+### **3. Detección Dinámica de la Columna Objetivo**
+
+* **`header = next(lector)`**: Extrae la primera fila correspondiente a los títulos de las columnas.
+* **`churn_idx = header.index('churn')`**: Busca de manera inteligente la posición numérica exacta de la columna `'churn'`, permitiendo que el script funcione correctamente incluso si la estructura o el orden de las columnas cambia en futuras versiones del dataset.
+
+### **4. Recorrido, Validación y Conteo Fila por Fila**
+
+Mediante un bucle `for fila in lector:`, el script procesa cada registro aplicando filtros de seguridad:
+
+* **Validación de longitud**: Comprueba que la fila posea los índices necesarios mediante `len(fila) <= churn_idx` para prevenir errores de tipo *IndexError*.
+* **Conversión y Clasificación**: Extrae el valor de la celda, limpia sus espacios en blanco con `.strip()` y lo convierte a un número entero (`int`).
+* **Acumulación condicional**:
+* Si el valor es `0`, incrementa el contador de **clientes retenidos**.
+* Si el valor es `1`, incrementa el contador de **clientes que abandonaron**.
+
+
+* **Manejo de errores internos (`except ValueError`)**: Si encuentra celdas corruptas, vacías o con textos anómalos, la instrucción `continue` descarta la fila de manera limpia sin interrumpir la ejecución general del programa.
+
+### **5. Cálculo de Porcentajes e Informe de Resultados**
+
+* **Proporciones estadísticas**: Una vez finalizado el recorrido, valida que se hayan encontrado registros válidos (`total_clientes > 0`) y calcula los porcentajes correspondientes de retención y abandono.
+* **Presentación formateada en consola**: Imprime un reporte ejecutivo claro y profesional, mostrando las cantidades absolutas con separadores de miles y las tasas porcentuales acotadas a dos decimales de precisión (`.2f`).
+
+---
+
+A continuación el código de la Practica01:
+
+import csv
+
+# Ruta del archivo CSV de abandono de clientes
+archivo_csv = './Bank Customer Churn Prediction.csv'
+
+# Variables contadoras
+total_clientes = 0
+clientes_retenidos = 0  # Churn = 0
+clientes_abandonaron = 0  # Churn = 1
+
+try:
+  # 1. Apertura del archivo CSV manejando posibles marcas de orden de bytes (BOM)
+  with open(archivo_csv, mode='r', encoding='utf-8', errors='ignore') as archivo:
+    content = archivo.read().lstrip('\ufeff')
+    lines = content.splitlines()
+    lector = csv.reader(lines)
+
+    # 2. Leer la cabecera para identificar dinámicamente el índice de la columna 'churn'
+    header = next(lector)
+    churn_idx = header.index('churn')
+
+    # 3. Recorrer el archivo fila por fila
+    for fila in lector:
+      # Validar que la fila tenga suficientes columnas
+      if len(fila) <= churn_idx:
+        continue
+
+      try:
+        # Extraer el valor de la columna churn y convertirlo a entero (0 o 1)
+        valor_churn = int(fila[churn_idx].strip())
+
+        total_clientes += 1
+
+        if valor_churn == 0:
+          clientes_retenidos += 1
+        elif valor_churn == 1:
+          clientes_abandonaron += 1
+
+      except ValueError:
+        # Salta filas que tengan errores de conversión o datos corruptos
+        continue
+
+  # 4. Cálculo de porcentajes
+  if total_clientes > 0:
+    pct_retenidos = (clientes_retenidos / total_clientes) * 100
+    pct_abandonaron = (clientes_abandonaron / total_clientes) * 100
+
+    # 5. Imprimir resultados formateados
+    print('--- ANÁLISIS DE FUGA DE CLIENTES (CHURN) ---')
+    print(f'Total de clientes analizados: {total_clientes:,}')
+    print(
+        f'Clientes Retenidos (0): {clientes_retenidos:,} ({pct_retenidos:.2f}%)'
+    )
+    print(
+        f'Clientes que Abandonaron (1): {clientes_abandonaron:,} ({pct_abandonaron:.2f}%)'
+    )
+  else:
+    print('No se encontraron registros válidos para procesar.')
+
+except Exception as e:
+  print(f'Ocurrió un error al procesar el archivo CSV: {e}')
+
+
